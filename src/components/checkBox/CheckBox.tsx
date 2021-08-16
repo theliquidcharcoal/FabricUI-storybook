@@ -1,5 +1,8 @@
-import { Checkbox, ICheckboxProps } from "@fluentui/react";
+import { Checkbox as FluentuiCheckBox, ICheckboxProps } from "@fluentui/react";
+import { initializeIcons } from "@fluentui/react/lib/Icons";
 
-export default function CheckBox({ ...props }: ICheckboxProps): JSX.Element {
-  return <Checkbox {...props} />;
+initializeIcons();
+
+export default function Checkbox({ ...props }: ICheckboxProps): JSX.Element {
+  return <FluentuiCheckBox {...props} />;
 }
