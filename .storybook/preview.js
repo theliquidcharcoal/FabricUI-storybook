@@ -1,3 +1,6 @@
+import { initializeIcons } from "@fluentui/react/lib/Icons";
+
+initializeIcons();
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
