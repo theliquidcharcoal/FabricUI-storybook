@@ -7,7 +7,7 @@ import { IconButton } from "./IconButton";
 import { PrimaryButton } from "./PrimaryButton";
 
 export default {
-  title: "Example/Button",
+  title: "Components/Button",
   component: DefaultButton,
 } as ComponentMeta<typeof DefaultButton>;
 
