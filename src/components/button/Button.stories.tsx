@@ -1,37 +1,80 @@
-import React from "react";
+import { IContextualMenuProps } from "@fluentui/react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-
-import { Button } from "./Button";
+import { CommandBarButton } from "./CommandBarButton";
+import { CompoundButton } from "./CompoundButton";
+import { DefaultButton } from "./DefaultButton";
+import { IconButton } from "./IconButton";
+import { PrimaryButton } from "./PrimaryButton";
 
 export default {
   title: "Example/Button",
-  component: Button,
-  argTypes: {
-    backgroundColor: { control: "color" },
-  },
-} as ComponentMeta<typeof Button>;
+  component: DefaultButton,
+} as ComponentMeta<typeof DefaultButton>;
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const menuProps: IContextualMenuProps = {
+  items: [
+    {
+      key: "emailMessage",
+      text: "Email message",
+      iconProps: { iconName: "Mail" },
+    },
+    {
+      key: "calendarEvent",
+      text: "Calendar event",
+      iconProps: { iconName: "Calendar" },
+    },
+  ],
+};
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Default: ComponentStory<typeof DefaultButton> = (args) => (
+  <DefaultButton {...args}>Default Button</DefaultButton>
+);
+Default.args = {
+  checked: false,
+  disabled: false,
   primary: true,
-  label: "Button",
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-  label: "Button",
+export const Primary: ComponentStory<typeof PrimaryButton> = (args) => (
+  <PrimaryButton {...args}>Primary Button</PrimaryButton>
+);
+Primary.args = {
+  checked: false,
+  disabled: false,
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: "large",
-  label: "Button",
+export const Compound: ComponentStory<typeof CompoundButton> = (args) => (
+  <CompoundButton {...args}>Compound Button</CompoundButton>
+);
+Compound.args = {
+  checked: false,
+  primary: true,
+  disabled: false,
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
-  label: "Button",
+export const CommandBar: ComponentStory<typeof CommandBarButton> = (args) => (
+  <div style={{ height: 44 }}>
+    <CommandBarButton {...args}>Command Bar Button</CommandBarButton>
+  </div>
+);
+CommandBar.args = {
+  checked: false,
+  menuProps,
+  disabled: false,
+  iconProps: {
+    iconName: "Add",
+  },
+};
+
+export const Icon: ComponentStory<typeof IconButton> = (args) => (
+  <div style={{ height: 44 }}>
+    <IconButton {...args} />
+  </div>
+);
+Icon.args = {
+  checked: false,
+  disabled: false,
+  title: "Emoji",
+  ariaLabel: "Emoji",
+  iconProps: { iconName: "Emoji2" },
 };
