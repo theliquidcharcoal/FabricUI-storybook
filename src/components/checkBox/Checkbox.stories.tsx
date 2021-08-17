@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
 
 export default {
-  title: "Example/CheckBox",
+  title: "Components/CheckBox",
   component: Checkbox,
   argTypes: {
     boxSide: {
