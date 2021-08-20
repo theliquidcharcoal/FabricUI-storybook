@@ -1,10 +1,15 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { createListItems, IExampleItem } from "@fluentui/example-data";
 import { List } from "./BasicList";
-import { FocusZone, getTheme, ITheme, mergeStyleSets } from "@fluentui/react";
+import * as React from "react";
+import { FocusZone } from "@fluentui/react/lib/FocusZone";
+import { ITheme, getTheme, mergeStyleSets } from "@fluentui/react/lib/Styling";
+import { createListItems, IExampleItem } from "@fluentui/example-data";
+import { useConst } from "@fluentui/react-hooks";
 
 const theme: ITheme = getTheme();
 const { palette, fonts } = theme;
+const ROWS_PER_PAGE = 3;
+const MAX_ROW_HEIGHT = 250;
 const classNames = mergeStyleSets({
   listGridExample: {
     overflow: "hidden",
@@ -65,44 +70,62 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof List>;
 
-const Template: ComponentStory<typeof List> = (args) => (
-  <FocusZone>
-    <List {...args} />
-  </FocusZone>
-);
+export const Basic: ComponentStory<typeof List> = (args) => {
+  const columnCount = React.useRef(0);
+  const rowHeight = React.useRef(0);
 
-export const Basic = Template.bind({});
-Basic.args = {
-  items: createListItems(20),
-  getItemCountForPage: () => {
-    return 3;
-  },
-  getPageHeight: () => {
-    return 100;
-  },
-  renderedWindowsAhead: 4,
-  onRenderCell: (item: IExampleItem, index: number | undefined) => {
-    return (
-      <div
-        className={classNames.listGridExampleTile}
-        data-is-focusable
-        style={{
-          width: 100 / 3 + "%",
-        }}
-      >
-        <div className={classNames.listGridExampleSizer}>
-          <div className={classNames.listGridExamplePadder}>
-            <img
-              src={item.thumbnail}
-              className={classNames.listGridExampleImage}
-              alt="hello"
-            />
-            <span
-              className={classNames.listGridExampleLabel}
-            >{`item ${index}`}</span>
+  const getItemCountForPage = React.useCallback((itemIndex, surfaceRect) => {
+    if (itemIndex === 0) {
+      columnCount.current = Math.ceil(surfaceRect.width / MAX_ROW_HEIGHT);
+      rowHeight.current = Math.floor(surfaceRect.width / columnCount.current);
+    }
+    return columnCount.current * ROWS_PER_PAGE;
+  }, []);
+
+  const onRenderCell = React.useCallback(
+    (item: IExampleItem, index: number | undefined) => {
+      return (
+        <div
+          className={classNames.listGridExampleTile}
+          data-is-focusable
+          style={{
+            width: 100 / columnCount.current + "%",
+          }}
+        >
+          <div className={classNames.listGridExampleSizer}>
+            <div className={classNames.listGridExamplePadder}>
+              <img
+                src={item.thumbnail}
+                className={classNames.listGridExampleImage}
+                alt={item.name}
+              />
+              <span
+                className={classNames.listGridExampleLabel}
+              >{`item ${index}`}</span>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  },
+      );
+    },
+    []
+  );
+
+  const getPageHeight = React.useCallback((): number => {
+    return rowHeight.current * ROWS_PER_PAGE;
+  }, []);
+
+  const items = useConst(() => createListItems(10));
+
+  return (
+    <FocusZone>
+      <List
+        className={classNames.listGridExample}
+        items={items}
+        getItemCountForPage={getItemCountForPage}
+        getPageHeight={getPageHeight}
+        renderedWindowsAhead={4}
+        onRenderCell={onRenderCell}
+      />
+    </FocusZone>
+  );
 };
