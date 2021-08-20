@@ -8,6 +8,11 @@ export default {
     boxSide: {
       control: { type: "radio", options: ["start", "end"] },
     },
+    activityDescription: {
+      control: {
+        type: "text",
+      },
+    },
   },
 } as ComponentMeta<typeof ActivityItem>;
 
@@ -17,5 +22,10 @@ const Template: ComponentStory<typeof ActivityItem> = (args) => (
 
 export const Basic = Template.bind({});
 Basic.args = {
-  activityDescription: <p>Hello activity</p>,
+  activityDescription: "Hello activity",
+  timeStamp: "Yesterday",
+  isCompact: false,
+  beaconColorTwo: "red",
+  beaconColorOne: "green",
+  animateBeaconSignal: false,
 };
